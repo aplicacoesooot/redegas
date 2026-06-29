@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sabesp | Consulta de Rede de Gás Comgás</title>
+  <meta name="description" content="Portal público da Sabesp para consulta de viabilidade e existência da rede de gás natural da Comgás nos municípios parceiros.">
+  
+  <!-- Fontes Premium -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Icones -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- CSS Customizado -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Background Glow FX -->
+  <div class="glow-bg bg-blue"></div>
+  <div class="glow-bg bg-cyan"></div>
+
+  <!-- Header -->
+  <header class="main-header">
+    <div class="container header-container">
+      <div class="logos-wrapper">
+        <div class="logo-sabesp">
+          <span class="logo-text-blue">sabesp</span>
+        </div>
+        <div class="logo-divider"></div>
+        <div class="logo-comgas">
+          <span class="logo-text-orange">comgás</span>
+        </div>
+      </div>
+      <div class="header-tag">
+        <span class="badge badge-online">
+          <span class="dot"></span> Base de Dados Integrada
+        </span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="container text-center">
+      <h1 class="hero-title">Consulta de Disponibilidade de <span>Rede de Gás</span></h1>
+      <p class="hero-subtitle">Consulte instantaneamente se a rede de gás canalizado da Comgás está disponível no seu logradouro através do sistema integrado da Sabesp.</p>
+    </div>
+  </section>
+
+  <!-- Main Content Container -->
+  <main class="main-content container">
+    
+    <!-- Search Form Card -->
+    <div class="card glass-card search-card">
+      <h2 class="card-title"><i class="fa-solid fa-sliders-h icon-blue"></i> Filtros de Busca</h2>
+      <form id="search-form" class="search-form">
+        
+        <div class="form-row">
+          <!-- Filtro Municipio -->
+          <div class="form-group flex-2">
+            <label for="filter-municipio"><i class="fa-solid fa-city"></i> Município *</label>
+            <select id="filter-municipio" required>
+              <option value="" disabled selected>Selecione o Município</option>
+              <option value="ALL">Todos os Municípios</option>
+              <option value="BARUERI">Barueri</option>
+              <option value="CARAPICUIBA">Carapicuíba</option>
+              <option value="COTIA">Cotia</option>
+              <option value="EMBU DAS ARTES">Embu das Artes</option>
+              <option value="ITAPEVI">Itapevi</option>
+              <option value="JANDIRA">Jandira</option>
+              <option value="OSASCO">Osasco</option>
+              <option value="SANTANA DE PARNAIBA">Santana de Parnaíba</option>
+              <option value="SAO PAULO">São Paulo</option>
+              <option value="TABOAO DA SERRA">Taboão da Serra</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row mt-3">
+          <!-- Filtro Logradouro (pesquisa no campo NOME) -->
+          <div class="form-group flex-2">
+            <label for="filter-logradouro"><i class="fa-solid fa-road"></i> Nome do Logradouro</label>
+            <input type="text" id="filter-logradouro" placeholder="Ex: Morumbi, Paulista, Helena...">
+          </div>
+
+          <!-- Filtro Bairro -->
+          <div class="form-group flex-1">
+            <label for="filter-bairro"><i class="fa-solid fa-map-pin"></i> Bairro / Distrito</label>
+            <input type="text" id="filter-bairro" placeholder="Ex: Vila Andrade">
+          </div>
+        </div>
+
+        <div class="form-actions mt-4">
+          <button type="reset" id="btn-clear" class="btn btn-outline">
+            <i class="fa-solid fa-trash-can"></i> Limpar Filtros
+          </button>
+          <button type="submit" id="btn-submit" class="btn btn-primary">
+            <i class="fa-solid fa-magnifying-glass"></i> Buscar Rede
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Results Section -->
+    <div id="results-container" class="results-section mt-5" style="display: none;">
+      <div class="results-header">
+        <div class="results-count-wrapper">
+          <span id="results-count" class="badge badge-cyan">0 resultados encontrados</span>
+        </div>
+        <div class="results-title-wrapper">
+          <h3 class="results-title"><i class="fa-solid fa-list-check"></i> Trechos da Rede Cadastrados</h3>
+        </div>
+      </div>
+
+      <!-- Loading State -->
+      <div id="loading-spinner" class="loading-state" style="display: none;">
+        <div class="spinner"></div>
+        <p>Consultando base de dados da Comgás...</p>
+      </div>
+
+      <!-- No Results State -->
+      <div id="no-results" class="no-results-state card glass-card" style="display: none;">
+        <i class="fa-solid fa-circle-info info-icon"></i>
+        <h4>Nenhuma Rede de Gás Encontrada</h4>
+        <p>Não encontramos registros de rede de gás canalizado para os filtros aplicados. Verifique se digitou corretamente o nome da rua ou CEP.</p>
+        <div class="info-action">
+          <p class="small-text">Deseja solicitar uma extensão de rede ou novas ligações? Entre em contato com a Comgás ou Sabesp.</p>
+          <a href="https://www.comgas.com.br" target="_blank" class="btn btn-small btn-secondary mt-2">Visitar Comgás</a>
+        </div>
+      </div>
+
+      <!-- Results Table -->
+      <div id="results-table-wrapper" class="table-responsive card glass-card">
+        <table class="results-table">
+          <thead>
+            <tr>
+              <th>Logradouro (Etiqueta)</th>
+              <th>Bairro</th>
+              <th>Distrito</th>
+              <th>Município</th>
+              <th>Rede Existente</th>
+            </tr>
+          </thead>
+          <tbody id="results-tbody">
+            <!-- Inserido via JS -->
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Pagination Controls -->
+      <div id="pagination-controls" class="pagination-wrapper mt-4">
+        <button id="btn-prev" class="btn btn-pagination" disabled>
+          <i class="fa-solid fa-chevron-left"></i> Anterior
+        </button>
+        <span id="pagination-info" class="pagination-info">Página 1 de 1</span>
+        <button id="btn-next" class="btn btn-pagination" disabled>
+          Próximo <i class="fa-solid fa-chevron-right"></i>
+        </button>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="main-footer mt-5">
+    <div class="container footer-content">
+      <div class="footer-logo">
+        <strong>Sabesp</strong> & <strong>Comgás</strong> | Integração de Redes Públicas
+      </div>
+      <p class="footer-copy">© 2026 Sabesp & Comgás. Portal público de consulta de viabilidade técnica de infraestrutura de gás.</p>
+    </div>
+  </footer>
+
+  <!-- Supabase Client CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  
+  <!-- JavaScript Lógico -->
+  <script type="module" src="app.js"></script>
+</body>
+</html>

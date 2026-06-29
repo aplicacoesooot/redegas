@@ -1,0 +1,24 @@
+# Dependencies
+node_modules/
+
+# Environment variables (NEVER commit)
+.env
+.env.local
+.env.*.local
+
+# Vite build output
+dist/
+dist-ssr/
+
+# Logs
+*.log
+npm-debug.log*
+
+# Editor / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Supabase local
+.supabase/
