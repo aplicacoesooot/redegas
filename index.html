@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sabesp | Consulta de Rede de Gás Comgás</title>
-  <meta name="description" content="Portal público da Sabesp para consulta de viabilidade e existência da rede de gás natural da Comgás nos municípios parceiros.">
+  <title>Consulta de Rede de Gás</title>
+  <meta name="description" content="Portal público para consulta de viabilidade e existência da rede de gás natural.">
   
   <!-- Fontes Premium -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -26,15 +26,7 @@
   <!-- Header -->
   <header class="main-header">
     <div class="container header-container">
-      <div class="logos-wrapper">
-        <div class="logo-sabesp">
-          <span class="logo-text-blue">sabesp</span>
-        </div>
-        <div class="logo-divider"></div>
-        <div class="logo-comgas">
-          <span class="logo-text-orange">comgás</span>
-        </div>
-      </div>
+     
       <div class="header-tag">
         <span class="badge badge-online">
           <span class="dot"></span> Base de Dados Integrada
@@ -47,7 +39,7 @@
   <section class="hero-section">
     <div class="container text-center">
       <h1 class="hero-title">Consulta de Disponibilidade de <span>Rede de Gás</span></h1>
-      <p class="hero-subtitle">Consulte instantaneamente se a rede de gás canalizado da Comgás está disponível no seu logradouro através do sistema integrado da Sabesp.</p>
+      <p class="hero-subtitle">Consulte instantaneamente se a rede de gás canalizado é exisente no seu logradouro através do sistema integrado.</p>
     </div>
   </section>
 
@@ -86,12 +78,6 @@
             <label for="filter-logradouro"><i class="fa-solid fa-road"></i> Nome do Logradouro</label>
             <input type="text" id="filter-logradouro" placeholder="Ex: Morumbi, Paulista, Helena...">
           </div>
-
-          <!-- Filtro Bairro -->
-          <div class="form-group flex-1">
-            <label for="filter-bairro"><i class="fa-solid fa-map-pin"></i> Bairro / Distrito</label>
-            <input type="text" id="filter-bairro" placeholder="Ex: Vila Andrade">
-          </div>
         </div>
 
         <div class="form-actions mt-4">
@@ -119,7 +105,7 @@
       <!-- Loading State -->
       <div id="loading-spinner" class="loading-state" style="display: none;">
         <div class="spinner"></div>
-        <p>Consultando base de dados da Comgás...</p>
+        <p>Consultando base de dados...</p>
       </div>
 
       <!-- No Results State -->
@@ -127,10 +113,7 @@
         <i class="fa-solid fa-circle-info info-icon"></i>
         <h4>Nenhuma Rede de Gás Encontrada</h4>
         <p>Não encontramos registros de rede de gás canalizado para os filtros aplicados. Verifique se digitou corretamente o nome da rua ou CEP.</p>
-        <div class="info-action">
-          <p class="small-text">Deseja solicitar uma extensão de rede ou novas ligações? Entre em contato com a Comgás ou Sabesp.</p>
-          <a href="https://www.comgas.com.br" target="_blank" class="btn btn-small btn-secondary mt-2">Visitar Comgás</a>
-        </div>
+       
       </div>
 
       <!-- Results Table -->
@@ -138,10 +121,10 @@
         <table class="results-table">
           <thead>
             <tr>
+              <th class="th-expand"></th>
               <th>Logradouro (Etiqueta)</th>
               <th>Bairro</th>
               <th>Distrito</th>
-              <th>Município</th>
               <th>Rede Existente</th>
             </tr>
           </thead>
@@ -168,10 +151,8 @@
   <!-- Footer -->
   <footer class="main-footer mt-5">
     <div class="container footer-content">
-      <div class="footer-logo">
-        <strong>Sabesp</strong> & <strong>Comgás</strong> | Integração de Redes Públicas
-      </div>
-      <p class="footer-copy">© 2026 Sabesp & Comgás. Portal público de consulta de viabilidade técnica de infraestrutura de gás.</p>
+      
+      <p class="footer-copy">©Portal público de consulta de viabilidade técnica de infraestrutura de gás.</p>
     </div>
   </footer>
 
