@@ -299,7 +299,6 @@ function renderTrechos(trechos, container) {
         <td>${numInicio}</td>
         <td>${numFinal}</td>
         <td>${cep}</td>
-        <td>${t.ID_COMGAS || '—'}</td>
         <td>${t.ID || '—'}</td>
         <td>${dataFmt}</td>
       </tr>`;
@@ -317,7 +316,6 @@ function renderTrechos(trechos, container) {
             <th><i class="fa-solid fa-arrow-right-to-bracket"></i> Nº Início</th>
             <th><i class="fa-solid fa-arrow-right-from-bracket"></i> Nº Final</th>
             <th><i class="fa-solid fa-envelope"></i> CEP</th>
-            <th><i class="fa-solid fa-id-badge"></i> ID Rede</th>
             <th><i class="fa-solid fa-fingerprint"></i> ID</th>
             <th><i class="fa-solid fa-calendar-days"></i> Data</th>
           </tr>
