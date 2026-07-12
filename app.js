@@ -179,11 +179,6 @@ function renderResults(data) {
       <td><strong>${etiqText}</strong><br><small class="text-muted">${etiqRaw}</small></td>
       <td>${bairro}</td>
       <td>${distrito}</td>
-      <td>
-        <span class="status-badge available">
-          <i class="fa-solid fa-circle-check"></i> Existente
-        </span>
-      </td>
     `;
 
     // Sub-linha oculta para os trechos
@@ -191,7 +186,7 @@ function renderResults(data) {
     subTr.className = 'sub-row';
     subTr.id = `sub-${rowId}`;
     subTr.style.display = 'none';
-    subTr.innerHTML = `<td colspan="5"><div class="trechos-container" id="trechos-${rowId}"></div></td>`;
+    subTr.innerHTML = `<td colspan="4"><div class="trechos-container" id="trechos-${rowId}"></div></td>`;
 
     resultsTbody.appendChild(tr);
     resultsTbody.appendChild(subTr);
