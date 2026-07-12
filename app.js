@@ -382,6 +382,11 @@ function renderTrechos(trechos, container) {
     }
 
     const idVal = t.ID || '—';
+    
+    let numeracao = '—';
+    if (numInicio !== '—' || numFinal !== '—') {
+      numeracao = `de ${numInicio} até ${numFinal}`;
+    }
 
     // Chave de identificação única para evitar registros visualmente idênticos
     const rowKey = `${numInicio}|${numFinal}|${cep}|${idVal}`;
@@ -389,8 +394,7 @@ function renderTrechos(trechos, container) {
       seen.add(rowKey);
       uniqueRows.push(`
       <tr class="trecho-row">
-        <td>${numInicio}</td>
-        <td>${numFinal}</td>
+        <td>${numeracao}</td>
         <td>${cep}</td>
         <td>${idVal}</td>
       </tr>`);
@@ -408,8 +412,7 @@ function renderTrechos(trechos, container) {
       <table class="trechos-table">
         <thead>
           <tr>
-            <th><i class="fa-solid fa-arrow-right-to-bracket"></i> Nº Início</th>
-            <th><i class="fa-solid fa-arrow-right-from-bracket"></i> Nº Final</th>
+            <th><i class="fa-solid fa-hashtag"></i> Numeração</th>
             <th><i class="fa-solid fa-envelope"></i> CEP</th>
             <th><i class="fa-solid fa-fingerprint"></i> ID</th>
           </tr>
