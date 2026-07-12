@@ -244,8 +244,7 @@ function renderResults(data) {
         </button>
       </td>
       <td><strong>${etiqText}</strong><br><small class="text-muted">${subTitleText}</small></td>
-      <td>${bairro}</td>
-      <td>${distrito}</td>
+      <td><strong>${bairro}</strong><br><small class="text-muted">${distrito}</small></td>
     `;
 
     // Sub-linha oculta para os trechos
@@ -253,7 +252,7 @@ function renderResults(data) {
     subTr.className = 'sub-row';
     subTr.id = `sub-${rowId}`;
     subTr.style.display = 'none';
-    subTr.innerHTML = `<td colspan="4"><div class="trechos-container" id="trechos-${rowId}"></div></td>`;
+    subTr.innerHTML = `<td colspan="3"><div class="trechos-container" id="trechos-${rowId}"></div></td>`;
 
     resultsTbody.appendChild(tr);
     resultsTbody.appendChild(subTr);
