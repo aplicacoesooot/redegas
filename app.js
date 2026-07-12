@@ -11,6 +11,7 @@ let currentPage = 1;
 const pageSize = 50;
 let totalRecords = 0;
 let currentFilters = {};
+let pageTrechosCache = {};
 
 // Elementos do DOM
 const searchForm = document.getElementById('search-form');
@@ -117,6 +118,34 @@ async function executeSearch(isPaging = false) {
     }
 
     totalRecords = count || 0;
+
+    // Buscar trechos para todos os logradouros retornados nesta página para calcular os trechos únicos e exibir no subtítulo
+    pageTrechosCache = {};
+    if (data && data.length > 0) {
+      try {
+        const nomes = [...new Set(data.map(item => item.NOME))];
+        const municipios = [...new Set(data.map(item => item.MUNICIPIO))];
+        
+        const { data: trechosData, error: trechosError } = await supabaseClient
+          .from('redegas')
+          .select('NOME,MUNICIPIO,ID_COMGAS,DATA_COMGA,ID,INI_E,FIN_E,INI_D,FIN_D,CEP_E,CEP_D')
+          .in('NOME', nomes)
+          .in('MUNICIPIO', municipios);
+
+        if (!trechosError && trechosData) {
+          trechosData.forEach(t => {
+            const key = `${t.NOME}|${t.MUNICIPIO}`;
+            if (!pageTrechosCache[key]) {
+              pageTrechosCache[key] = [];
+            }
+            pageTrechosCache[key].push(t);
+          });
+        }
+      } catch (e) {
+        console.error("Erro ao pré-carregar trechos:", e);
+      }
+    }
+
     renderResults(data);
 
     // Rolar suavemente para os resultados se for uma nova busca
@@ -163,7 +192,46 @@ function renderResults(data) {
 
     // Etiqueta formatada
     const etiqText = row.ETIQ_AC || row.ETIQ || row.NOME || 'Não informado';
-    const etiqRaw  = row.ETIQ   || row.NOME || '';
+    
+    // Obter trechos pré-carregados para esta rua
+    const cacheKey = `${row.NOME}|${row.MUNICIPIO}`;
+    const trechosList = pageTrechosCache[cacheKey] || [];
+    
+    // Calcular a quantidade de trechos únicos (usando a mesma lógica do distinct)
+    const seen = new Set();
+    let uniqueCount = 0;
+    trechosList.forEach(t => {
+      const iniE = parseInt(t.INI_E) || 0;
+      const iniD = parseInt(t.INI_D) || 0;
+      const nonZeroInis = [iniE, iniD].filter(v => v > 0);
+      const numInicio = nonZeroInis.length ? Math.min(...nonZeroInis) : null;
+
+      const finE = parseInt(t.FIN_E) || 0;
+      const finD = parseInt(t.FIN_D) || 0;
+      const nonZeroFins = [finE, finD].filter(v => v > 0);
+      const numFinal = nonZeroFins.length ? Math.max(...nonZeroFins) : '—';
+
+      const cepE = (t.CEP_E || '').trim().replace(/\D/g, '');
+      const cepD = (t.CEP_D || '').trim().replace(/\D/g, '');
+      let cep;
+      if (cepE && cepD && cepE !== '0' && cepD !== '0' && cepE.length > 1 && cepD.length > 1) {
+        cep = cepE === cepD ? formatCep(cepE) : `${formatCep(cepE)} / ${formatCep(cepD)}`;
+      } else {
+        const valid = [cepE, cepD].find(c => c && c !== '0' && c.length > 1);
+        cep = valid ? formatCep(valid) : '—';
+      }
+
+      const dataFmt = t.DATA_COMGA ? formatDate(t.DATA_COMGA) : '—';
+      const idVal = t.ID || '—';
+
+      const rowKey = `${numInicio !== null ? numInicio : '—'}|${numFinal}|${cep}|${idVal}|${dataFmt}`;
+      if (!seen.has(rowKey)) {
+        seen.add(rowKey);
+        uniqueCount++;
+      }
+    });
+
+    const subTitleText = `${uniqueCount} trecho(s) único(s) cadastrado(s)`;
     const bairro   = (row.BAIRRO   && row.BAIRRO.trim())   ? row.BAIRRO.trim()   : '—';
     const distrito = (row.DISTRITO && row.DISTRITO.trim()) ? row.DISTRITO.trim() : '—';
 
@@ -176,7 +244,7 @@ function renderResults(data) {
           <i class="fa-solid fa-chevron-right expand-icon"></i>
         </button>
       </td>
-      <td><strong>${etiqText}</strong><br><small class="text-muted">${etiqRaw}</small></td>
+      <td><strong>${etiqText}</strong><br><small class="text-muted">${subTitleText}</small></td>
       <td>${bairro}</td>
       <td>${distrito}</td>
     `;
@@ -228,7 +296,14 @@ async function toggleTrechos(rowId, nome, municipio) {
       <span>Carregando trechos...</span>
     </div>`;
 
-  const trechos = await fetchTrechos(nome, municipio);
+  // Tenta carregar do cache antes de fazer fetch
+  const cacheKey = `${nome}|${municipio}`;
+  let trechos = pageTrechosCache[cacheKey];
+
+  if (!trechos) {
+    trechos = await fetchTrechos(nome, municipio);
+  }
+  
   renderTrechos(trechos, container);
   container.dataset.loaded = 'true';
 }
