@@ -266,7 +266,10 @@ function renderTrechos(trechos, container) {
     return;
   }
 
-  const rows = trechos.map(t => {
+  const uniqueRows = [];
+  const seen = new Set();
+
+  trechos.forEach(t => {
     // Número início: menor valor não-zero entre INI_E e INI_D
     const iniE = parseInt(t.INI_E) || 0;
     const iniD = parseInt(t.INI_D) || 0;
@@ -293,21 +296,29 @@ function renderTrechos(trechos, container) {
     }
 
     const dataFmt = t.DATA_COMGA ? formatDate(t.DATA_COMGA) : '—';
+    const idVal = t.ID || '—';
 
-    return `
+    // Chave de identificação única para evitar registros visualmente idênticos
+    const rowKey = `${numInicio}|${numFinal}|${cep}|${idVal}|${dataFmt}`;
+    if (!seen.has(rowKey)) {
+      seen.add(rowKey);
+      uniqueRows.push(`
       <tr class="trecho-row">
         <td>${numInicio}</td>
         <td>${numFinal}</td>
         <td>${cep}</td>
-        <td>${t.ID || '—'}</td>
+        <td>${idVal}</td>
         <td>${dataFmt}</td>
-      </tr>`;
-  }).join('');
+      </tr>`);
+    }
+  });
+
+  const rows = uniqueRows.join('');
 
   container.innerHTML = `
     <div class="trechos-header-label">
       <i class="fa-solid fa-route"></i>
-      <strong>${trechos.length}</strong> trecho(s) cadastrado(s)
+      <strong>${uniqueRows.length}</strong> trecho(s) único(s) cadastrado(s)
     </div>
     <div class="trechos-table-wrapper">
       <table class="trechos-table">
