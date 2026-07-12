@@ -1,8 +1,10 @@
-// Configuração do Supabase Client
-const SUPABASE_URL = "https://ggxlztpttlaudkiqsuqb.supabase.co";
-const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdneGx6dHB0dGxhdWRraXFzdXFiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI1MDMzMDgsImV4cCI6MjA5ODA3OTMwOH0.W72Aa_XEuiHfjvFA0tV3T6Vy7juXS1yoJ-VXBBJeDs0";
+// Configuração do Supabase Client (via variáveis de ambiente Vite)
+import { createClient } from '@supabase/supabase-js';
 
-const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
+const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY;
+
+const supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 // Paginação e Estado Global
 let currentPage = 1;
@@ -75,7 +77,7 @@ async function executeSearch(isPaging = false) {
     
     // Início da query na view de logradouros únicos
     let query = supabaseClient
-      .from('comgas_distinct')
+      .from('redegas_distinct')
       .select('NOME,ETIQ,ETIQ_AC,BAIRRO,DISTRITO,MUNICIPIO', { count: 'exact' });
 
     // Aplicar filtros dinamicamente
@@ -240,7 +242,7 @@ async function toggleTrechos(rowId, nome, municipio) {
 async function fetchTrechos(nome, municipio) {
   try {
     let query = supabaseClient
-      .from('comgas')
+      .from('redegas')
       .select('ID_COMGAS,DATA_COMGA,ID,INI_E,FIN_E,INI_D,FIN_D,CEP_E,CEP_D')
       .eq('NOME', nome);
 
