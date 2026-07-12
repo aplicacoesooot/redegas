@@ -266,15 +266,27 @@ function renderTrechos(trechos, container) {
     return;
   }
 
-  const uniqueRows = [];
-  const seen = new Set();
-
-  trechos.forEach(t => {
-    // Número início: menor valor não-zero entre INI_E e INI_D
+  // Pré-calcula o menor número de início para ordenar de forma correta (numérica)
+  const mappedTrechos = trechos.map(t => {
     const iniE = parseInt(t.INI_E) || 0;
     const iniD = parseInt(t.INI_D) || 0;
     const nonZeroInis = [iniE, iniD].filter(v => v > 0);
-    const numInicio = nonZeroInis.length ? Math.min(...nonZeroInis) : '—';
+    const numInicio = nonZeroInis.length ? Math.min(...nonZeroInis) : null;
+    return { ...t, _numInicio: numInicio };
+  });
+
+  // Ordena os trechos pelo menor número de início de forma crescente (nulos por último)
+  mappedTrechos.sort((a, b) => {
+    if (a._numInicio === null) return 1;
+    if (b._numInicio === null) return -1;
+    return a._numInicio - b._numInicio;
+  });
+
+  const uniqueRows = [];
+  const seen = new Set();
+
+  mappedTrechos.forEach(t => {
+    const numInicio = t._numInicio !== null ? t._numInicio : '—';
 
     // Número final: maior valor não-zero entre FIN_E e FIN_D
     const finE = parseInt(t.FIN_E) || 0;
