@@ -221,10 +221,9 @@ function renderResults(data) {
         cep = valid ? formatCep(valid) : '—';
       }
 
-      const dataFmt = t.DATA_COMGA ? formatDate(t.DATA_COMGA) : '—';
       const idVal = t.ID || '—';
 
-      const rowKey = `${numInicio !== null ? numInicio : '—'}|${numFinal}|${cep}|${idVal}|${dataFmt}`;
+      const rowKey = `${numInicio !== null ? numInicio : '—'}|${numFinal}|${cep}|${idVal}`;
       if (!seen.has(rowKey)) {
         seen.add(rowKey);
         uniqueCount++;
@@ -382,11 +381,10 @@ function renderTrechos(trechos, container) {
       cep = valid ? formatCep(valid) : '—';
     }
 
-    const dataFmt = t.DATA_COMGA ? formatDate(t.DATA_COMGA) : '—';
     const idVal = t.ID || '—';
 
     // Chave de identificação única para evitar registros visualmente idênticos
-    const rowKey = `${numInicio}|${numFinal}|${cep}|${idVal}|${dataFmt}`;
+    const rowKey = `${numInicio}|${numFinal}|${cep}|${idVal}`;
     if (!seen.has(rowKey)) {
       seen.add(rowKey);
       uniqueRows.push(`
@@ -395,7 +393,6 @@ function renderTrechos(trechos, container) {
         <td>${numFinal}</td>
         <td>${cep}</td>
         <td>${idVal}</td>
-        <td>${dataFmt}</td>
       </tr>`);
     }
   });
@@ -415,7 +412,6 @@ function renderTrechos(trechos, container) {
             <th><i class="fa-solid fa-arrow-right-from-bracket"></i> Nº Final</th>
             <th><i class="fa-solid fa-envelope"></i> CEP</th>
             <th><i class="fa-solid fa-fingerprint"></i> ID</th>
-            <th><i class="fa-solid fa-calendar-days"></i> Data</th>
           </tr>
         </thead>
         <tbody>${rows}</tbody>
