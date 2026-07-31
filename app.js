@@ -128,7 +128,7 @@ async function executeSearch(isPaging = false) {
         
         const { data: trechosData, error: trechosError } = await supabaseClient
           .from('redegas')
-          .select('NOME,MUNICIPIO,ID_COMGAS,DATA_COMGA,ID,INI_E,FIN_E,INI_D,FIN_D,CEP_E,CEP_D')
+          .select('NOME,MUNICIPIO,ID_COMGAS,INI_E,FIN_E,INI_D,FIN_D,CEP_E,CEP_D')
           .in('NOME', nomes)
           .in('MUNICIPIO', municipios);
 
@@ -221,9 +221,7 @@ function renderResults(data) {
         cep = valid ? formatCep(valid) : '—';
       }
 
-      const idVal = t.ID || '—';
-
-      const rowKey = `${numInicio !== null ? numInicio : '—'}|${numFinal}|${cep}|${idVal}`;
+      const rowKey = `${numInicio !== null ? numInicio : '—'}|${numFinal}|${cep}`;
       if (!seen.has(rowKey)) {
         seen.add(rowKey);
         uniqueCount++;
@@ -311,7 +309,7 @@ async function fetchTrechos(nome, municipio) {
   try {
     let query = supabaseClient
       .from('redegas')
-      .select('ID_COMGAS,DATA_COMGA,ID,INI_E,FIN_E,INI_D,FIN_D,CEP_E,CEP_D')
+      .select('ID_COMGAS,INI_E,FIN_E,INI_D,FIN_D,CEP_E,CEP_D')
       .eq('NOME', nome);
 
     if (municipio) {
@@ -380,22 +378,19 @@ function renderTrechos(trechos, container) {
       cep = valid ? formatCep(valid) : '—';
     }
 
-    const idVal = t.ID || '—';
-    
     let numeracao = '—';
     if (numInicio !== '—' || numFinal !== '—') {
       numeracao = `de ${numInicio} até ${numFinal}`;
     }
 
     // Chave de identificação única para evitar registros visualmente idênticos
-    const rowKey = `${numInicio}|${numFinal}|${cep}|${idVal}`;
+    const rowKey = `${numInicio}|${numFinal}|${cep}`;
     if (!seen.has(rowKey)) {
       seen.add(rowKey);
       uniqueRows.push(`
       <tr class="trecho-row">
         <td>${numeracao}</td>
         <td>${cep}</td>
-        <td>${idVal}</td>
       </tr>`);
     }
   });
@@ -413,7 +408,6 @@ function renderTrechos(trechos, container) {
           <tr>
             <th><i class="fa-solid fa-hashtag"></i> Numeração</th>
             <th><i class="fa-solid fa-envelope"></i> CEP</th>
-            <th><i class="fa-solid fa-fingerprint"></i> ID</th>
           </tr>
         </thead>
         <tbody>${rows}</tbody>

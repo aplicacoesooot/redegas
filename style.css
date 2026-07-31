@@ -864,7 +864,7 @@ select {
 /* Adiciona um espaçamento generoso após o CEP (2ª coluna) para afastar a coluna do ID */
 .trechos-table th:nth-child(2),
 .trechos-table td:nth-child(2) {
-  padding-right: 80px;
+  padding-right: 100px;
 }
 
 
