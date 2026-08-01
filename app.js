@@ -28,10 +28,46 @@ const paginationInfo = document.getElementById('pagination-info');
 
 
 // Inicialização da Página
-document.addEventListener('DOMContentLoaded', () => {
-  // Limpar os filtros ao carregar
+document.addEventListener('DOMContentLoaded', async () => {
   searchForm.reset();
+  await loadMunicipios();
 });
+
+// Carrega os municípios dinamicamente da base de dados
+async function loadMunicipios() {
+  const selectMunicipio = document.getElementById('filter-municipio');
+  try {
+    const { data, error } = await supabaseClient
+      .from('redegas_distinct')
+      .select('MUNICIPIO')
+      .not('MUNICIPIO', 'is', null);
+
+    if (error || !data) {
+      console.error('Erro ao carregar municípios:', error);
+      return;
+    }
+
+    // Extrair valores únicos e ordenar alfabeticamente
+    const list = [...new Set(data.map(item => item.MUNICIPIO).filter(Boolean))].sort((a, b) => 
+      a.localeCompare(b, 'pt-BR', { sensitivity: 'base' })
+    );
+
+    // Reconstruir as opções do select
+    selectMunicipio.innerHTML = `
+      <option value="" disabled selected>Selecione o Município</option>
+      <option value="ALL">Todos os Municípios</option>
+    `;
+
+    list.forEach(muni => {
+      const option = document.createElement('option');
+      option.value = muni;
+      option.textContent = muni;
+      selectMunicipio.appendChild(option);
+    });
+  } catch (err) {
+    console.error('Erro inesperado ao carregar municípios:', err);
+  }
+}
 
 // Event Listeners
 searchForm.addEventListener('submit', async (e) => {
