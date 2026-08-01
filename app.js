@@ -40,7 +40,8 @@ async function loadMunicipios() {
     const { data, error } = await supabaseClient
       .from('redegas_distinct')
       .select('MUNICIPIO')
-      .not('MUNICIPIO', 'is', null);
+      .not('MUNICIPIO', 'is', null)
+      .limit(50000);
 
     if (error || !data) {
       console.error('Erro ao carregar municípios:', error);
