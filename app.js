@@ -1,8 +1,8 @@
 // Configuração do Supabase Client (via variáveis de ambiente Vite)
 import { createClient } from '@supabase/supabase-js';
 
-const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
-const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY;
+const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL || 'https://fcwcnlmfkyhgkfdgxlnp.supabase.co';
+const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZjd2NubG1ma3loZ2tmZGd4bG5wIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODM4NjQyMjksImV4cCI6MjA5OTQ0MDIyOX0.eGk9ib07mLeaJnbfHSs7t7lSH5MXgR20J8fSAWNkujw';
 
 const supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
