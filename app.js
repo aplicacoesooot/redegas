@@ -48,8 +48,8 @@ async function loadMunicipios() {
       return;
     }
 
-    // Extrair valores únicos e ordenar alfabeticamente
-    const list = [...new Set(data.map(item => item.MUNICIPIO).filter(Boolean))].sort((a, b) => 
+    // Extrair valores únicos, normalizando maiúsculas e ordenando alfabeticamente
+    const list = [...new Set(data.map(item => (item.MUNICIPIO || '').trim()).filter(Boolean))].sort((a, b) => 
       a.localeCompare(b, 'pt-BR', { sensitivity: 'base' })
     );
 
